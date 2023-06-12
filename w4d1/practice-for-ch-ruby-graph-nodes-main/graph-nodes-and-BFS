@@ -1,0 +1,45 @@
+require "set" # don't forget to load in the Set file
+
+class GraphNode
+    attr_accessor :value, :neighbors
+
+    def initialize(value)
+        @value = value
+        @neighbors = []
+    end
+
+    def add_neighbor(node)
+        @neighors << node
+    end
+end
+
+def bfs(starting_node, target_value)
+    checked = Set.new() # use a set because there are no duplicates possible (can perform include?, add, delete)
+    queue = [starting_node]
+
+    while queue.length > 0
+        node = queue.shift
+
+        if !checked.include?(node)
+            return node.value if node.value == target_value
+            checked.add(node) # add node to checked set to prevent double counting
+            queue += node.neighbors
+        end
+    end
+
+    nil
+end
+
+a = GraphNode.new('a')
+b = GraphNode.new('b')
+c = GraphNode.new('c')
+d = GraphNode.new('d')
+e = GraphNode.new('e')
+f = GraphNode.new('f')
+a.neighbors = [b, c, e]
+c.neighbors = [b, d]
+e.neighbors = [a]
+f.neighbors = [e]
+
+p bfs(a, "b")
+p bfs(a, "f")
